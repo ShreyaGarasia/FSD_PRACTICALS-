@@ -1,0 +1,167 @@
+/* Full page center layout */
+body {
+margin: 0;
+padding: 0;
+background-color: white;
+display: flex;
+justify-content: center;
+align-items: center;
+min-height: 100vh;
+font-family: 'Times New Roman', Times, serif;
+}
+
+/* Main todo box */
+.todo-container {
+width: 400px;
+padding: 30px 25px;
+border-radius: 12px;
+background-color: #29234d;
+box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+color: white;
+text-align: center;
+}
+
+/* Title */
+.todo-container h1 {
+margin-bottom: 20px;
+font-size: 24px;
+font-weight: bold;
+color: #ffffff;
+}
+
+/* Input box styling */
+.input-box {
+display: flex;
+gap: 0;
+margin-bottom: 15px;
+border-radius: 8px;
+overflow: hidden;
+}
+
+/* Task input */
+.input-box input {
+flex: 1;
+padding: 12px;
+font-size: 14px;
+border: medium;
+background-color: #2a2544;
+color: white;
+border-top-left-radius: 8px;
+border-bottom-left-radius: 8px;
+}
+
+.input-box input::placeholder {
+color: #aaa;
+}
+
+/* Add Task button */
+.add-btn {
+background-color: #5223ed;
+border: none;
+padding: 12px 16px;
+color: white;
+font-size: 14px;
+border-top-right-radius: 8px;
+border-bottom-right-radius: 8px;
+transition: background-color 0.2s ease-in-out;
+}
+
+.add-btn:hover {
+background-color: #6e47ed;
+}
+
+/* Voice button aligned to the right */
+.voice-wrapper {
+display: flex;
+justify-content: flex-end;
+margin-bottom: 15px;
+}
+
+.voice-btn {
+background-color: #4314ba;
+border: none;
+color: white;
+padding: 10px 16px;
+border-radius: 6px;
+font-size: 14px;
+cursor: pointer;
+transition: background-color 0.2s ease-in-out;
+}
+
+.voice-btn:hover {
+background-color: #4314ba;
+}
+
+/* Transcript preview */
+.transcript {
+font-style: italic;
+color: #cccccc;
+margin-bottom: 15px;
+text-align: left;
+}
+
+/* Task list */
+.task-list {
+list-style: none;
+padding: 0;
+}
+
+/* Individual task */
+.task {
+background-color: #4646eb;
+color: white;
+margin-bottom: 12px;
+padding: 14px 16px;
+border-radius: 8px;
+display: flex;
+justify-content: space-between;
+align-items: center;
+}
+
+/* Task content */
+.task span {
+font-size: 16px;
+flex: 1;
+text-align: left;
+}
+
+/* Task buttons */
+.task-buttons {
+display: flex;
+gap: 10px;
+}
+
+/* Icon buttons */
+.icon-btn {
+background: none;
+border: none;
+color: white;
+cursor: pointer;
+font-size: 16px;
+transition: transform 0.2s ease;
+}
+
+.icon-btn:hover {
+transform: scale(1.1);
+}
+
+/* Completed message display */
+.completed-message {
+background-color: #1c4cd0;
+color: white;
+padding: 10px 16px;
+border-radius: 6px;
+margin-bottom: 15px;
+font-size: 14px;
+text-align: center;
+animation: fadeInOut 3s ease forwards;
+}
+
+/* Fade in/out animation */
+@keyframes fadeInOut {
+0%   { opacity: 0; transform: translateY(-10px); }
+10%  { opacity: 1; transform: translateY(0); }
+90%  { opacity: 1; transform: translateY(0); }
+100% { opacity: 0; transform: translateY(-10px); }
+}
+
