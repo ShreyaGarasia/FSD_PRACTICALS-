@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang = "en">
+    <head>
+        <title>PRA1</title>
+        <meta charset = "UTF-8">
+        <meta name = "viewport" content = "width=device-width, initial-scale=1">
+    </head>
+<style>
+    body {
+        background-color: white;
+        margin-top: 250px;
+        text-align: center;
+    }
+
+    .voting button {
+        margin: 10px;
+        padding: 10px;
+        font-size: 16px;
+    }
+
+    .result {
+        margin: 10px;
+        font-size: 16px;
+    }
+
+</style>
+<body>
+        <h2> Vote For Your Favorite Language </h2>
+
+    <div class="voting">
+        <button onclick="vote('JavaScript')">JavaScript</button>
+        <button onclick="vote('Python')">Python</button>
+        <button onclick="vote('Java')">Java</button>
+    </div>
+
+    <div class="result">
+    <p>JavaScript: <span id="js-count">0</span></p>
+    <p>Python: <span id="py-count">0</span></p>
+    <p>Java: <span id="java-count">0</span></p>
+</div>
+
+<script src="Pra1.js"></script>
+
+</body>
+</html>
