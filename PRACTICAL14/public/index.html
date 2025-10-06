@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Resume Upload</title>
+<!-- Tailwind CSS CDN -->
+<script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+
+<div class="bg-white shadow-lg rounded-2xl p-8 w-full max-w-md">
+    <h2 class="text-2xl font-semibold text-gray-800 text-center">
+    Upload Your Resume
+    </h2>
+    <p class="text-sm text-gray-500 text-center mt-2">
+    Only PDF files up to <span class="font-medium">2MB</span>
+    </p>
+
+    <form class="mt-6 flex flex-col items-center" onsubmit="return validateFile()">
+    <!-- File input -->
+    <input
+        id="resumeFile"
+        type="file"
+        accept=".pdf"
+        class="block w-full text-sm text-gray-600
+        file:mr-4 file:py-2 file:px-4
+        file:rounded-full file:border-0
+        file:text-sm file:font-semibold
+        file:bg-blue-50 file:text-blue-600
+        hover:file:bg-blue-100
+        "
+    />
+
+    <!-- Upload button -->
+    <button
+        type="submit"
+        class="mt-6 w-full bg-blue-600 text-white py-2 rounded-lg shadow-md hover:bg-blue-700 transition"
+    >
+        Upload
+    </button>
+    </form>
+</div>
+
+<script>
+    function validateFile() {
+    const fileInput = document.getElementById("resumeFile");
+    if (!fileInput.files.length) {
+        alert("Please select a file before uploading.");
+        return false;
+    }
+
+    const file = fileInput.files[0];
+
+      // Check file type
+    if (file.type !== "application/pdf") {
+        alert("Only PDF files are allowed.");
+        return false;
+    }
+
+      // Check file size (max 2MB)
+      if (file.size > 2 * 1024 * 1024) {
+        alert("File size must be less than 2MB.");
+        return false;
+    }
+
+    alert("File uploaded successfully!");
+      return false; // prevent actual form submission (demo)
+    }
+</script>
+</body>
+</html>
