@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login / Signup / Dashboard</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI', sans-serif; }
+  body { height:100vh; display:flex; justify-content:center; align-items:center; background: linear-gradient(135deg, #1e3c72, #2a5298); }
+
+  .card { background:white; border-radius:12px; width:400px; padding:40px 30px; box-shadow:0 10px 30px rgba(0,0,0,0.2); position:relative; transition:0.5s; }
+  h2 { text-align:center; margin-bottom:25px; color:#1e3c72; }
+
+  input { width:100%; padding:12px 15px; margin:10px 0; border-radius:8px; border:1px solid #ccc; font-size:14px; transition:0.3s; }
+  input:focus { border-color:#1e3c72; outline:none; box-shadow:0 0 5px rgba(30,60,114,0.5); }
+
+  button { width:100%; padding:12px; border:none; border-radius:8px; background:#1e3c72; color:white; font-size:16px; cursor:pointer; margin-top:15px; transition:0.3s; }
+  button:hover { background:#16325c; }
+
+  .toggle { text-align:center; margin-top:15px; font-size:14px; color:#1e3c72; cursor:pointer; transition:0.3s; }
+  .toggle:hover { text-decoration:underline; }
+
+  .hidden { display:none; }
+  .dashboard-info { text-align:center; }
+  .dashboard-info p { margin:10px 0; font-size:16px; color:#1e3c72; }
+</style>
+</head>
+<body>
+
+<div class="card" id="authCard">
+  <!-- Login/Signup Form -->
+  <div id="formContainer">
+    <h2 id="formTitle"> Library Portal Login</h2>
+    <input type="text" id="name" placeholder="Name" class="hidden">
+    <input type="email" id="email" placeholder="Email">
+    <input type="password" id="password" placeholder="Password">
+    <button id="submitBtn">Login</button>
+    <div class="toggle" id="toggleForm">Don't have an account? Sign Up</div>
+  </div>
+
+  <!-- Dashboard -->
+  <div id="dashboardContainer" class="hidden">
+    <h2>Dashboard</h2>
+    <div class="dashboard-info">
+      <p>Name: <span id="userName"></span></p>
+      <p>Email: <span id="userEmail"></span></p>
+      <p>Login Time: <span id="loginTime"></span></p>
+      <p id="logoutTimeP" class="hidden">Logout Time: <span id="logoutTime"></span></p>
+    </div>
+    <button id="logoutBtn">Logout</button>
+  </div>
+</div>
+
+<script>
+const nameInput = document.getElementById('name');
+const emailInput = document.getElementById('email');
+const passwordInput = document.getElementById('password');
+const submitBtn = document.getElementById('submitBtn');
+const toggleForm = document.getElementById('toggleForm');
+const formTitle = document.getElementById('formTitle');
+const formContainer = document.getElementById('formContainer');
+const dashboardContainer = document.getElementById('dashboardContainer');
+const userName = document.getElementById('userName');
+const userEmail = document.getElementById('userEmail');
+const loginTime = document.getElementById('loginTime');
+const logoutBtn = document.getElementById('logoutBtn');
+const logoutTimeP = document.getElementById('logoutTimeP');
+const logoutTimeSpan = document.getElementById('logoutTime');
+
+let isLogin = true;
+
+// Toggle login/signup form
+toggleForm.addEventListener('click', () => {
+  isLogin = !isLogin;
+  if (isLogin) {
+    nameInput.classList.add('hidden');
+    submitBtn.textContent = 'Login';
+    formTitle.textContent = 'Login';
+    toggleForm.textContent = "Don't have an account? Sign Up";
+  } else {
+    nameInput.classList.remove('hidden');
+    submitBtn.textContent = 'Sign Up';
+    formTitle.textContent = 'Sign Up';
+    toggleForm.textContent = "Already have an account? Login";
+  }
+});
+
+// Check if user is already logged in
+const currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
+if (currentUser) {
+  showDashboard(currentUser);
+}
+
+// Submit login/signup
+submitBtn.addEventListener('click', () => {
+  const name = nameInput.value.trim();
+  const email = emailInput.value.trim();
+  const password = passwordInput.value.trim();
+
+  if (!email || !password || (!isLogin && !name)) {
+    alert('Please fill all required fields!');
+    return;
+  }
+
+  let users = JSON.parse(sessionStorage.getItem('users') || '[]');
+
+  if (!isLogin) {
+    // Signup
+    if (users.find(u => u.email === email)) {
+      alert('Email already exists!');
+      return;
+    }
+    users.push({ name, email, password });
+    sessionStorage.setItem('users', JSON.stringify(users));
+    alert('Sign up successful! Please login.');
+    toggleForm.click();
+    return;
+  }
+
+  // Login
+  const user = users.find(u => u.email === email && u.password === password);
+  if (!user) { alert('Invalid email or password!'); return; }
+
+  const userSession = { name: user.name, email: user.email, loginTime: new Date().toLocaleString() };
+  sessionStorage.setItem('currentUser', JSON.stringify(userSession));
+  showDashboard(userSession);
+});
+
+// Show dashboard
+function showDashboard(user) {
+  formContainer.classList.add('hidden');
+  dashboardContainer.classList.remove('hidden');
+  userName.textContent = user.name;
+  userEmail.textContent = user.email;
+  loginTime.textContent = user.loginTime;
+  logoutTimeP.classList.add('hidden');
+}
+
+// Logout
+logoutBtn.addEventListener('click', () => {
+  const user = JSON.parse(sessionStorage.getItem('currentUser'));
+  if (user) {
+    user.logoutTime = new Date().toLocaleString();
+    logoutTimeSpan.textContent = user.logoutTime;
+    logoutTimeP.classList.remove('hidden');
+  }
+  sessionStorage.removeItem('currentUser');
+  setTimeout(() => {
+    dashboardContainer.classList.add('hidden');
+    formContainer.classList.remove('hidden');
+    emailInput.value = '';
+    passwordInput.value = '';
+  }, 1500);
+});
+</script>
+
+</body>
+</html>
