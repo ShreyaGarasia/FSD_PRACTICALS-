@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Kids Calculator</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- Balloons -->
+  <div class="cloud cloud1"></div>
+  <div class="cloud cloud2"></div>
+  <div class="cloud cloud3"></div>
+  <div class="cloud cloud4"></div>
+  <div class="cloud cloud5"></div>
+  <div class="cloud cloud6"></div>
+
+
+
+  <div class="container">
+    <h1>🌈 Kids Calculator ☀️</h1>
+
+    <form id="calcForm">
+      <input id="a" type="text" placeholder="Enter first number" required />
+      <input id="b" type="text" placeholder="Enter second number" required />
+
+      <div class="ops">
+        <button type="button" class="add" onclick="calculate('add')">➕ Add</button>
+        <button type="button" class="subtract" onclick="calculate('subtract')">➖ Subtract</button>
+        <button type="button" class="multiply" onclick="calculate('multiply')">✖ Multiply</button>
+        <button type="button" class="divide" onclick="calculate('divide')">➗ Divide</button>
+      </div>
+    </form>
+
+    <div id="feedback">
+      <p id="error" class="error" hidden></p>
+      <p id="result" class="result" hidden></p>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

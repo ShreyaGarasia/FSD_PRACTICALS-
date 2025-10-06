@@ -1,0 +1,295 @@
+/* Reset */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: "Comic Sans MS", "Arial Rounded MT Bold", sans-serif;
+}
+
+body {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background: #87ceeb; /* Nice blue sky */
+  overflow: hidden; /* keep clouds inside */
+  position: relative;
+}
+
+/* Moving clouds */
+.cloud {
+  position: absolute;
+  background: white;
+  border-radius: 50%;
+  opacity: 0.9;
+  animation: moveClouds linear infinite;
+}
+
+.cloud::before,
+.cloud::after {
+  content: '';
+  position: absolute;
+  background: white;
+  border-radius: 50%;
+}
+
+.cloud1 {
+  width: 120px;
+  height: 60px;
+  top: 20%;
+  left: -150px;
+  animation-duration: 40s;
+}
+.cloud1::before {
+  width: 80px;
+  height: 80px;
+  top: -20px;
+  left: 10px;
+}
+.cloud1::after {
+  width: 60px;
+  height: 60px;
+  top: 0;
+  left: 60px;
+}
+
+.cloud2 {
+  width: 150px;
+  height: 70px;
+  top: 40%;
+  left: -200px;
+  animation-duration: 60s;
+}
+.cloud2::before {
+  width: 90px;
+  height: 90px;
+  top: -25px;
+  left: 20px;
+}
+.cloud2::after {
+  width: 70px;
+  height: 70px;
+  top: 5px;
+  left: 80px;
+}
+
+.cloud3 {
+  width: 100px;
+  height: 50px;
+  top: 70%;
+  left: -120px;
+  animation-duration: 50s;
+}
+.cloud3::before {
+  width: 70px;
+  height: 70px;
+  top: -15px;
+  left: 10px;
+}
+.cloud3::after {
+  width: 50px;
+  height: 50px;
+  top: 0;
+  left: 60px;
+}
+
+@keyframes moveClouds {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(120vw);
+  }
+}
+
+/* Clouds moving from right side */
+.cloud4 {
+  width: 140px;
+  height: 65px;
+  top: 25%;
+  right: -180px; /* start outside on right */
+  animation: moveCloudRight 55s linear infinite;
+}
+.cloud4::before {
+  width: 85px;
+  height: 85px;
+  top: -20px;
+  left: -30px;
+}
+.cloud4::after {
+  width: 65px;
+  height: 65px;
+  top: 0;
+  left: -70px;
+}
+
+.cloud5 {
+  width: 170px;
+  height: 80px;
+  top: 50%;
+  right: -220px;
+  animation: moveCloudRight 70s linear infinite;
+}
+.cloud5::before {
+  width: 95px;
+  height: 95px;
+  top: -25px;
+  left: -40px;
+}
+.cloud5::after {
+  width: 75px;
+  height: 75px;
+  top: 5px;
+  left: -90px;
+}
+
+.cloud6 {
+  width: 110px;
+  height: 55px;
+  top: 75%;
+  right: -150px;
+  animation: moveCloudRight 45s linear infinite;
+}
+.cloud6::before {
+  width: 75px;
+  height: 75px;
+  top: -15px;
+  left: -25px;
+}
+.cloud6::after {
+  width: 55px;
+  height: 55px;
+  top: 0;
+  left: -60px;
+}
+
+/* Right → left movement */
+@keyframes moveCloudRight {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-120vw);
+  }
+}
+
+
+/* Calculator container */
+.container {
+  background: #fff;
+  padding: 35px;
+  border-radius: 20px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+  text-align: center;
+  width: 420px;
+  animation: popIn 0.6s ease;
+  position: relative;
+  z-index: 2; /* above clouds */
+}
+
+h1 {
+  margin-bottom: 20px;
+  font-size: 2rem;
+  color: #ff6f61;
+  animation: bounce 2s infinite;
+}
+
+/* Input boxes */
+input {
+  width: 100%;
+  padding: 14px;
+  margin: 10px 0;
+  font-size: 1.2rem;
+  border-radius: 12px;
+  border: 2px solid #ddd;
+  outline: none;
+  transition: border 0.2s ease, transform 0.2s ease;
+}
+
+input:focus {
+  border: 2px solid #ff6f61;
+  transform: scale(1.05);
+}
+
+/* Buttons grid */
+.ops {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+  margin-top: 18px;
+}
+
+button {
+  padding: 14px;
+  font-size: 1.2rem;
+  border: none;
+  border-radius: 15px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: transform 0.15s ease, background 0.2s ease;
+  color: white;
+}
+
+/* Colorful buttons */
+button.add {
+  background: #4caf50;
+}
+button.subtract {
+  background: #f44336;
+}
+button.multiply {
+  background: #2196f3;
+}
+button.divide {
+  background: #ff9800;
+}
+
+button:hover {
+  transform: scale(1.05) rotate(-2deg);
+  filter: brightness(1.1);
+}
+
+button:active {
+  transform: scale(0.95) rotate(2deg);
+}
+
+/* Result & error messages */
+.result, .error {
+  margin-top: 20px;
+  font-size: 1.4rem;
+  font-weight: bold;
+  animation: popResult 0.4s ease;
+}
+
+.result {
+  color: #28a745;
+}
+
+.error {
+  color: #d9534f;
+}
+
+/* Animations */
+@keyframes popIn {
+  from {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+@keyframes popResult {
+  from { transform: scale(0.6); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+
