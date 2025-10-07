@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Tuition Admin Panel</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --primary:#4a90e2;
+  --secondary:#f59e0b;
+  --accent:#10b981;
+  --bg:#f0f4f8;
+  --card:#fff;
+  --text:#1f2937;
+  --muted:#6b7280;
+  --danger:#dc2626;
+  --success:#22c55e;
+  --hover:#e0f2fe;
+  --shadow:rgba(0,0,0,0.12);
+}
+body{
+  margin:0;
+  font-family:'Inter',sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  transition:0.3s;
+}
+body.dark{
+  --bg:#1f2937;
+  --card:#374151;
+  --text:#f9fafb;
+  --muted:#9ca3af;
+  --hover:#4b5563;
+}
+header{
+  background:linear-gradient(135deg,var(--primary),var(--secondary));
+  color:#fff;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:18px 24px;
+  font-size:22px;
+  font-weight:600;
+  box-shadow:0 4px 12px var(--shadow);
+  border-bottom:2px solid var(--accent);
+}
+header button{
+  padding:6px 12px;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
+  font-weight:600;
+  background:rgba(255,255,255,0.2);
+  color:#fff;
+  transition:0.3s;
+}
+header button:hover{background:rgba(255,255,255,0.35);}
+.container{
+  max-width:1200px;
+  margin:24px auto;
+  display:grid;
+  grid-template-columns:2fr 1fr;
+  gap:24px;
+}
+.card{
+  background:var(--card);
+  border-radius:16px;
+  padding:24px;
+  box-shadow:0 6px 24px var(--shadow);
+  transition:0.3s;
+}
+.card:hover{
+  transform:translateY(-4px);
+  box-shadow:0 12px 28px var(--shadow);
+}
+.card h2{
+  margin-top:0;
+  color:var(--primary);
+  font-size:22px;
+  border-left:4px solid var(--accent);
+  padding-left:12px;
+}
+input, select, button{
+  font-family:'Inter',sans-serif;
+}
+input, select{
+  width:100%;
+  padding:10px;
+  margin-bottom:14px;
+  border-radius:10px;
+  border:1px solid #d1d5db;
+  font-size:15px;
+  transition:0.3s;
+}
+input:focus, select:focus{
+  outline:none;
+  border-color:var(--accent);
+  background:#f0f9ff;
+}
+button.primary{
+  background:linear-gradient(90deg,var(--primary),var(--secondary));
+  color:#fff;
+  border:none;
+  padding:10px;
+  border-radius:10px;
+  cursor:pointer;
+  font-weight:600;
+  transition:0.3s;
+}
+button.primary:hover{
+  background:linear-gradient(90deg,var(--secondary),var(--primary));
+  transform:translateY(-1px);
+}
+table{
+  width:100%;
+  border-collapse:collapse;
+  border-radius:12px;
+  overflow:hidden;
+}
+th, td{
+  padding:12px;
+  text-align:left;
+  font-size:14px;
+}
+th{
+  background:linear-gradient(90deg,var(--primary),var(--secondary));
+  color:#fff;
+  position:sticky;
+  top:0;
+  z-index:1;
+}
+tr:hover td{
+  background:linear-gradient(90deg,#e0f7fa,#fef3c7);
+}
+.btn{
+  padding:6px 10px;
+  border-radius:6px;
+  border:none;
+  cursor:pointer;
+  font-size:13px;
+  margin:2px;
+  color:#fff;
+  font-weight:600;
+  transition:0.2s;
+}
+.btn:hover{transform:scale(1.1);}
+.btn.edit{background:var(--secondary);}
+.btn.delete{background:var(--danger);}
+input.search{
+  width:100%;
+  padding:8px 12px;
+  margin-bottom:14px;
+  border-radius:10px;
+  border:1px solid #d1d5db;
+}
+.toast{
+  position:fixed;
+  right:20px;
+  bottom:20px;
+  background:#111827;
+  color:white;
+  padding:12px 18px;
+  border-radius:10px;
+  display:none;
+  z-index:999;
+  font-size:14px;
+}
+.modal-backdrop{
+  position:fixed;
+  inset:0;
+  background:rgba(2,6,23,0.45);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:50;
+}
+.modal{
+  background:var(--card);
+  width:440px;
+  border-radius:16px;
+  padding:22px;
+  box-shadow:0 12px 36px rgba(2,6,23,0.3);
+  animation:fadeIn 0.25s;
+}
+.modal h3{
+  margin:0 0 12px 0;
+  color:var(--accent);
+  font-weight:600;
+}
+.modal .row{
+  display:flex;
+  flex-direction:column;
+  margin-bottom:12px;
+}
+.modal input{margin-bottom:0;}
+.modal button{margin-top:12px;}
+@keyframes fadeIn{
+  0%{opacity:0;transform:translateY(-10px);}
+  100%{opacity:1;transform:translateY(0);}
+}
+@media(max-width:900px){
+  .container{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+<header>
+  Tuition Admin Panel
+  <button id="toggleDark">🌙 Dark Mode</button>
+</header>
+
+<div class="container">
+  <div class="card">
+    <h2>Student Records</h2>
+    <input type="text" class="search" id="searchInput" placeholder="Search by name/class/email">
+    <table>
+      <thead>
+        <tr><th>Name</th><th>Age</th><th>Class</th><th>Email</th><th>Actions</th></tr>
+      </thead>
+      <tbody id="studentsList">
+        <tr><td colspan="5" style="text-align:center;color:#6b7280;">Loading...</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2>Add Student</h2>
+    <form id="addForm">
+      <input id="name" placeholder="Full Name" required>
+      <input id="age" type="number" placeholder="Age">
+      <input id="class" placeholder="Class">
+      <input id="email" type="email" placeholder="Email">
+      <button type="submit" class="primary">Add Student</button>
+    </form>
+  </div>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<div id="modalBackdrop" class="modal-backdrop">
+  <div class="modal">
+    <h3>Edit Student</h3>
+    <input id="editName" placeholder="Name" required>
+    <input id="editAge" type="number" placeholder="Age">
+    <input id="editClass" placeholder="Class">
+    <input id="editEmail" type="email" placeholder="Email">
+    <button id="saveEdit" class="primary">Save Changes</button>
+    <button id="cancelEdit" class="primary" style="background:#6b7280;margin-top:8px;">Cancel</button>
+  </div>
+</div>
+
+<script>
+const API_URL='http://localhost:5000/students';
+const $=id=>document.getElementById(id);
+const toast=$('toast');
+let students=[],editingId=null;
+
+function showToast(msg,time=2500){
+  toast.textContent=msg;
+  toast.style.display='block';
+  setTimeout(()=>toast.style.display='none',time);
+}
+
+async function loadStudents(){
+  const tbody=$('studentsList');
+  tbody.innerHTML='<tr><td colspan="5" style="text-align:center;">Loading...</td></tr>';
+  try{
+    const res=await fetch(API_URL);
+    if(!res.ok) throw new Error();
+    students=await res.json();
+    renderTable(students);
+  }catch{
+    tbody.innerHTML='<tr><td colspan="5" style="text-align:center;color:red;">Failed to load students</td></tr>';
+  }
+}
+
+function renderTable(data){
+  const tbody=$('studentsList');
+  tbody.innerHTML=data.length?data.map(s=>`
+    <tr>
+      <td>${s.name}</td>
+      <td>${s.age||'-'}</td>
+      <td>${s.class||'-'}</td>
+      <td>${s.email||'-'}</td>
+      <td>
+        <button class="btn edit" onclick="openEdit('${s._id}')">Edit</button>
+        <button class="btn delete" onclick="deleteStudent('${s._id}')">Delete</button>
+      </td>
+    </tr>`).join(''):'<tr><td colspan="5" style="text-align:center;color:#6b7280;">No records yet</td></tr>';
+}
+
+// Add
+$('addForm').addEventListener('submit',async e=>{
+  e.preventDefault();
+  const payload={name:$('name').value,age:$('age').value,class:$('class').value,email:$('email').value};
+  try{
+    const res=await fetch(API_URL+'/add',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+    if(!res.ok) throw new Error();
+    showToast('Student added!');
+    $('addForm').reset();
+    loadStudents();
+  }catch{showToast('Failed to add');}
+});
+
+// Delete
+async function deleteStudent(id){
+  if(!confirm('Are you sure?')) return;
+  try{
+    await fetch(`${API_URL}/delete/${id}`,{method:'DELETE'});
+    showToast('Deleted!');
+    loadStudents();
+  }catch{showToast('Delete failed');}
+}
+
+// Edit
+function openEdit(id){
+  const s=students.find(st=>st._id===id);
+  if(!s) return;
+  editingId=id;
+  $('editName').value=s.name;
+  $('editAge').value=s.age;
+  $('editClass').value=s.class;
+  $('editEmail').value=s.email;
+  $('modalBackdrop').style.display='flex';
+}
+$('saveEdit').addEventListener('click',async ()=>{
+  const payload={name:$('editName').value,age:$('editAge').value,class:$('editClass').value,email:$('editEmail').value};
+  try{
+    await fetch(`${API_URL}/edit/${editingId}`,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+    showToast('Updated!');
+    $('modalBackdrop').style.display='none';
+    loadStudents();
+  }catch{showToast('Update failed');}
+});
+$('cancelEdit').addEventListener('click',()=>{$('modalBackdrop').style.display='none';});
+
+// Search
+$('searchInput').addEventListener('input',e=>{
+  const val=e.target.value.toLowerCase();
+  const filtered=students.filter(s=>s.name.toLowerCase().includes(val)||s.class.toLowerCase().includes(val)||s.email.toLowerCase().includes(val));
+  renderTable(filtered);
+});
+
+// Dark mode
+$('toggleDark').addEventListener('click',()=>document.body.classList.toggle('dark'));
+
+loadStudents();
+</script>
+</body>
+</html>
