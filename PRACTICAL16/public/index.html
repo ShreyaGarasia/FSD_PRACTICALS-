@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Contact | Portfolio</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      background: linear-gradient(135deg, #e0f7fa, #e1bee7);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #333;
+    }
+
+    .container {
+      background: #fff;
+      padding: 40px 50px;
+      border-radius: 20px;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+      max-width: 600px;
+      width: 100%;
+      transition: transform .3s ease;
+      animation: fadeIn .8s ease;
+    }
+    .container:hover { transform: translateY(-4px); }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    h1 {
+      text-align: center;
+      font-weight: 600;
+      color: #4a148c;
+      margin-bottom: 10px;
+    }
+    p.subtitle {
+      text-align: center;
+      font-size: 0.95rem;
+      color: #555;
+      margin-bottom: 25px;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+    label { font-weight: 500; }
+
+    input, textarea {
+      width: 100%;
+      padding: 12px 14px;
+      border: 2px solid #ddd;
+      border-radius: 10px;
+      font-size: 1rem;
+      transition: 0.2s ease;
+    }
+    input:focus, textarea:focus {
+      border-color: #7b1fa2;
+      box-shadow: 0 0 0 3px rgba(123,31,162,0.2);
+      outline: none;
+    }
+
+    textarea { resize: vertical; min-height: 120px; }
+
+    button {
+      background: linear-gradient(90deg, #7b1fa2, #4a148c);
+      color: white;
+      font-size: 1rem;
+      padding: 12px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 14px rgba(74,20,140,0.25);
+    }
+    button:disabled { opacity: 0.7; cursor: not-allowed; }
+
+    .msg {
+      text-align: center;
+      padding: 14px;
+      border-radius: 10px;
+      font-weight: 500;
+      display: none;
+    }
+    .msg.success {
+      background: #e6ffed; color: #0f5132;
+      border: 1px solid #a3cfbb;
+      display: block;
+      animation: fadeIn .3s ease;
+    }
+    .msg.error {
+      background: #ffe6e6; color: #842029;
+      border: 1px solid #f5c2c7;
+      display: block;
+      animation: fadeIn .3s ease;
+    }
+
+    @media (max-width: 600px) {
+      .container { padding: 30px 25px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>CONTACT</h1>
+    <p class="subtitle">Have a project or question? Drop me a message below 👇</p>
+
+    <div id="responseMsg" class="msg" role="status" aria-live="polite"></div>
+
+    <form id="contactForm" novalidate>
+      <label for="name">Full Name *</label>
+      <input type="text" id="name" required maxlength="100" placeholder="Your name" />
+
+      <label for="email">Email Address *</label>
+      <input type="email" id="email" required placeholder="you@example.com" />
+
+      <label for="subject">Subject</label>
+      <input type="text" id="subject" maxlength="150" placeholder="What's this about?" />
+
+      <label for="message">Message *</label>
+      <textarea id="message" required minlength="10" placeholder="Write your message..."></textarea>
+
+      <button type="submit" id="submitBtn">Send Message</button>
+    </form>
+  </div>
+
+  <script>
+    const form = document.getElementById('contactForm');
+    const responseMsg = document.getElementById('responseMsg');
+    const submitBtn = document.getElementById('submitBtn');
+
+    function showMessage(text, type='success') {
+      responseMsg.textContent = text;
+      responseMsg.className = 'msg ' + type;
+      responseMsg.style.display = 'block';
+      setTimeout(() => { responseMsg.style.display = 'none'; }, 6000);
+    }
+
+    function validateEmail(email) {
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      responseMsg.style.display = 'none';
+
+      const name = document.getElementById('name').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const subject = document.getElementById('subject').value.trim();
+      const message = document.getElementById('message').value.trim();
+
+      if (!name) return showMessage('Please enter your name.', 'error');
+      if (!validateEmail(email)) return showMessage('Please enter a valid email.', 'error');
+      if (message.length < 10) return showMessage('Message must be at least 10 characters.', 'error');
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Sending...';
+
+      try {
+        const backendURL = 'http://localhost:5009/api/contact'; // ✅ your backend port
+        const res = await fetch(backendURL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, email, subject, message })
+        });
+
+        const data = await res.json();
+        if (res.ok && data.success) {
+          showMessage('✅ Message sent successfully!', 'success');
+          form.reset();
+        } else {
+          showMessage(data.message || '❌ Failed to send message.', 'error');
+        }
+      } catch (err) {
+        showMessage('⚠️ Network error. Please try again later.', 'error');
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Send Message';
+      }
+    });
+  </script>
+</body>
+</html>
